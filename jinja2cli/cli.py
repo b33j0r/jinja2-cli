@@ -172,6 +172,20 @@ def _load_env():
     return _parse_env, Exception, MalformedEnv
 
 
+def _load_sys_env():
+    def _parse_sys_env(data):
+        """
+        Parse an envfile format of key=value pairs that are newline separated
+        """
+        dict_ = dict(**os.environ)
+        dict_.update({
+            k.lower(): v
+            for k, v in dict_.items()
+        })
+        return dict_
+    return _parse_sys_env, Exception, MalformedEnv
+
+
 # Global list of available format parsers on your system
 # mapped to the callable/Exception to parse a string into a dict
 formats = {
@@ -183,6 +197,7 @@ formats = {
     'toml': _load_toml,
     'xml': _load_xml,
     'env': _load_env,
+    'sysenv': _load_sys_env
 }
 
 
@@ -218,7 +233,9 @@ def is_fd_alive(fd):
 
 def cli(opts, args):
     format = opts.format
-    if args[1] == '-':
+    if format == 'sysenv':
+        data = 'sysenv-dummy-data'
+    elif args[1] == '-':
         if is_fd_alive(sys.stdin):
             data = sys.stdin.read()
         else:

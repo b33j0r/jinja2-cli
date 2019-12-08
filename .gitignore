@@ -32,3 +32,8 @@ nosetests.xml
 
 #Mr Developer
 .mr.developer.cfg
+
+.DS_Store
+.idea/
+scratch*
+output.txt

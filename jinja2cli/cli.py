@@ -4,7 +4,7 @@ jinja2-cli
 
 License: BSD, see LICENSE for more details.
 """
-
+import shlex
 import sys
 import os
 from jinja2cli import __version__
@@ -179,7 +179,7 @@ def _load_sys_env():
         """
         dict_ = dict(**os.environ)
         dict_.update({
-            k.lower(): v
+            k.lower(): v # shlex.quote(v)
             for k, v in dict_.items()
         })
         return dict_

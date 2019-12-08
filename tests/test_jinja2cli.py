@@ -22,3 +22,14 @@ def test_absolute_path():
     if isinstance(output, cli.binary_type):
         output = output.decode('utf-8')
     assert output == "Test"
+
+
+def test_encoding():
+    absolute_base_path = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(absolute_base_path, "files", "template.j2")
+
+    output = cli.render(path, {"title": "Te$t"}, [])
+    assert output == b"Te$t"
+    if isinstance(output, cli.binary_type):
+        output = output.decode('utf-8')
+    assert output == "Te$t"
